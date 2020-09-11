@@ -14,7 +14,7 @@ class Etlab:
     def login_and_fetch(self):
         self.session = HTMLSession()
         url = "https://tkmce.etlab.in/user/login"
-        return self.session.post(url, data=self.login_cred).text
+        self.session.post(url, data=self.login_cred)
         p = self.session.get('https://tkmce.etlab.in/ktuacademics/student/viewattendancesubject/6')
         soup = BeautifulSoup(p.text, "html.parser")
         result = ""

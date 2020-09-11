@@ -37,19 +37,21 @@ def process(data):
     data.pop('Name')
     data.pop('Percentage')
     final = []
+    # print(data)
     for i in data:
         att = int(data[i][0])
         tot = int(data[i][1])
         if tot == 0:
-            per = "NA"
+            continue
         else:
             per = att / tot * 100
         l = [i, att, tot, per]
         final.append(l)
     for_(final, 90)
+    print()
     for_(final, 80)
-    final.append(cred)
-    print(final)
+    # print(cred)
+    # print(final)
 
 
 username = input("Enter your username: ").strip()
@@ -59,7 +61,6 @@ if username == "" or password == "":
 else:
     data = Etlab(username, password)
     result = data.login_and_fetch()
-    print(result)
     if result.startswith("Invalid"):
         print(result)
     else:
