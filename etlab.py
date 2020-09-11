@@ -14,7 +14,14 @@ class Etlab:
     def login_and_fetch(self):
         self.session = HTMLSession()
         url = "https://tkmce.etlab.in/user/login"
-        self.session.post(url, data=self.login_cred)
+        r = self.session.post(url, data=self.login_cred).text
+        try:
+            soup = BeautifulSoup(r, "html.parser")
+            c = soup.find(id="LoginForm_password_em_").get_text()
+            print(c, 1)
+            return -1
+        except:
+            pass
         p = self.session.get('https://tkmce.etlab.in/ktuacademics/student/viewattendancesubject/6')
         soup = BeautifulSoup(p.text, "html.parser")
         result = ""
@@ -26,8 +33,6 @@ class Etlab:
                             if c.strip() != "":
                                 result += (c.strip())
                                 result += "\n"
-        if "Percentage" not in result:
-            return "Invalid Credentials"
         return result
 
     def fetch_data(self, result):

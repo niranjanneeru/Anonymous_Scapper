@@ -61,8 +61,6 @@ if username == "" or password == "":
 else:
     data = Etlab(username, password)
     result = data.login_and_fetch()
-    if result.startswith("Invalid"):
-        print(result)
-    else:
+    if result != -1:
         d = data.fetch_data(result)
         process(d)
