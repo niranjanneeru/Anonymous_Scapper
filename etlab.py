@@ -18,7 +18,7 @@ class Etlab:
         try:
             soup = BeautifulSoup(r, "html.parser")
             c = soup.find(id="LoginForm_password_em_").get_text()
-            print(c, 1)
+            print(c)
             return 0
         except:
             return 1
@@ -65,3 +65,24 @@ class Etlab:
                 if len(ll) > 1:
                     l.append(ll)
         return l
+
+    def fetch_answers(self, assignments):
+        links = []
+        for assignment in assignments:
+            url = assignment[2].split('/')
+            url[-2] = 'submitassignment'
+            url = "https://tkmce.etlab.in" + '/'.join(url)
+            # print(url)
+            ass = self.session.get(url).text
+            soup = BeautifulSoup(ass, "html.parser")
+            try:
+                c = soup.find(id='AssignmentData_upload_file').get_text()
+            except:
+                table = soup.find('table')
+                for row in table:
+                    row = str(row)
+                    if row.strip() != '':
+                        souped = BeautifulSoup(row, 'html.parser')
+                        for a in souped.find_all('a', href=True):
+                            links.append("https://tkmce.etlab.in/"+a['href'])
+        return links

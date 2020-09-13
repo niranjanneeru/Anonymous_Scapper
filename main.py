@@ -62,13 +62,16 @@ def main(username, password):
     data = Etlab(username, password)
     result = data.login()
     if result:
-        # d = data.fetch_data()
-        # process(d)
-        assignment = data.fetch_assignment()
+        d = data.fetch_data()
+        process(d)  # Percent
+        assignment = data.fetch_assignment()  # Assignments
         for l in assignment:
             for a in l:
                 print(a, end="-")
             print()
+        links = data.fetch_answers(assignment)  # Links to Assignment
+        for link in links:
+            print(link)
 
 
 if __name__ == "__main__":
