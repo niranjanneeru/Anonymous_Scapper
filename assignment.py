@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 
 u = "190983"
-p = "Niranjan_2002"
+p = "Niranjan_202"
 
 login_cred = {
     "LoginForm[username]": u,
