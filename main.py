@@ -1,5 +1,9 @@
 from etlab import Etlab
-from percent_data import for_
+
+
+def for_(data, per):
+    for i in data:
+        print(i[0], int(i[1] * (100 / per) - i[2]))
 
 
 def process(data):
@@ -54,13 +58,23 @@ def process(data):
     # print(final)
 
 
-username = input("Enter your username: ").strip()
-password = input("Enter your password: ").strip()
-if username == "" or password == "":
-    print("Credentials can't be empty")
-else:
+def main(username, password):
     data = Etlab(username, password)
-    result = data.login_and_fetch()
-    if result != -1:
-        d = data.fetch_data(result)
-        process(d)
+    result = data.login()
+    if result:
+        # d = data.fetch_data()
+        # process(d)
+        assignment = data.fetch_assignment()
+        for l in assignment:
+            for a in l:
+                print(a, end="-")
+            print()
+
+
+if __name__ == "__main__":
+    usernam = input("Enter your username: ").strip()
+    passwor = input("Enter your password: ").strip()
+    if usernam == "" or passwor == "":
+        print("Credentials can't be empty")
+    else:
+        main(usernam, passwor)

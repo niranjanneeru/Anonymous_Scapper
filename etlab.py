@@ -11,7 +11,7 @@ class Etlab:
             "LoginForm[password]": pas
         }
 
-    def login_and_fetch(self):
+    def login(self):
         self.session = HTMLSession()
         url = "https://tkmce.etlab.in/user/login"
         r = self.session.post(url, data=self.login_cred).text
@@ -19,9 +19,11 @@ class Etlab:
             soup = BeautifulSoup(r, "html.parser")
             c = soup.find(id="LoginForm_password_em_").get_text()
             print(c, 1)
-            return -1
+            return 0
         except:
-            pass
+            return 1
+
+    def fetch_data(self):
         p = self.session.get('https://tkmce.etlab.in/ktuacademics/student/viewattendancesubject/6')
         soup = BeautifulSoup(p.text, "html.parser")
         result = ""
@@ -33,12 +35,33 @@ class Etlab:
                             if c.strip() != "":
                                 result += (c.strip())
                                 result += "\n"
-        return result
-
-    def fetch_data(self, result):
         sub = [i for i in result[:result.find("Percentage") + 10].split("\n") if i.strip() != ""]
         value = [i for i in result[result.find("Percentage") + 10:].split("\n") if i.strip() != ""]
         data = dict()
         for i in range(len(sub)):
             data[sub[i]] = value[i]
         return data
+
+    def fetch_assignment(self):
+        url = "https://tkmce.etlab.in/student/assignments"
+        p = self.session.get(url).text
+        soup = BeautifulSoup(p, "html.parser")
+        l = []
+        for row in soup.find('table'):
+            for cols in row:
+                ll = []
+                for col in cols:
+                    try:
+                        col = str(col)
+                        if col.strip() != '':
+                            if col.find('</a>') == -1:
+                                souped = BeautifulSoup(col, "html.parser")
+                                ll.append(souped.find_all('td')[0].text)
+                            else:
+                                souped = BeautifulSoup(col, "html.parser")
+                                ll.append(souped.find_all('a', href=True)[0]['href'])
+                    except:
+                        pass
+                if len(ll) > 1:
+                    l.append(ll)
+        return l
